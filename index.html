@@ -16,6 +16,8 @@
             padding: 32px 16px 64px;
         }
         .app { width: 100%; max-width: 640px; }
+
+        /* Header */
         header {
             background: linear-gradient(135deg, #111827, #1e293b);
             color: #fff;
@@ -37,12 +39,16 @@
         header h1 { font-size: 26px; letter-spacing: 0.5px; }
         header h1 span { color: #f59e0b; }
         header p { font-size: 13px; color: #9ca3af; margin-top: 2px; }
+
+        /* Main card */
         .card {
             background: #fff;
             border-radius: 0 0 14px 14px;
             padding: 24px;
             box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
         }
+
+        /* Add task form */
         .add-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
         .add-row { display: flex; gap: 10px; }
         .add-row input[type="text"], .add-row input[type="date"], .add-row select {
@@ -62,6 +68,7 @@
             background: #fff;
         }
         #taskTitle { flex: 1; min-width: 0; }
+        #hiddenDate { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
         #taskPriority { width: 120px; }
         #taskDesc { flex: 1; min-width: 0; }
         .add-btn {
@@ -79,6 +86,8 @@
         .add-btn:hover { background: #1f2937; }
         .add-btn:active { transform: scale(0.99); }
         .add-error { color: #dc2626; font-size: 13px; display: none; }
+
+        /* Filters */
         .filters { display: flex; gap: 8px; margin-bottom: 18px; }
         .filter-btn {
             padding: 7px 16px;
@@ -107,6 +116,8 @@
             font-weight: 700;
         }
         .filter-btn.active .count { background: rgba(255,255,255,0.2); }
+
+        /* Task list */
         .task-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
         .task-item {
             border: 1.5px solid #e5e7eb;
@@ -202,25 +213,8 @@
         }
         .cancel-btn:hover { border-color: #9ca3af; background: #f9fafb; }
         .date-group { display: flex; gap: 0; align-items: stretch; }
-        #taskDueDisplay {
-            flex: 1;
-            min-width: 0;
-            border: 1.5px solid #d1d5db;
-            border-right: none;
-            border-radius: 8px 0 0 8px;
-            padding: 11px 12px;
-            font-size: 15px;
-            font-family: inherit;
-            background: #f9fafb;
-            color: inherit;
-            outline: none;
-            cursor: pointer;
-        }
-        #taskDueDisplay:focus {
-            border-color: #f59e0b;
-            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
-            background: #fff;
-        }
+
+        #taskDueDisplay { flex: 1; min-width: 0; border-right: none; border-radius: 8px 0 0 8px; }
         .date-icon-btn {
             padding: 0 12px;
             background: #f9fafb;
@@ -238,6 +232,8 @@
         .add-btn.editing { background: #2563eb; }
         .add-btn.editing:hover { background: #1d4ed8; }
         .form-actions { display: flex; gap: 10px; }
+
+        /* Empty state */
         .empty {
             text-align: center;
             padding: 44px 20px;
@@ -246,6 +242,8 @@
         .empty svg { width: 52px; height: 52px; margin-bottom: 14px; opacity: 0.5; }
         .empty h3 { color: #4b5563; font-size: 17px; margin-bottom: 4px; }
         .empty p { font-size: 14px; }
+
+        /* Footer */
         .footer {
             margin-top: 20px;
             padding-top: 16px;
@@ -257,17 +255,21 @@
             color: #6b7280;
         }
         .footer .stat strong { color: #111827; }
+
         @media (max-width: 768px) {
             .add-row { flex-wrap: wrap; }
             #taskTitle { width: 100%; flex: none; }
             .date-group { flex: 1; min-width: 0; }
+
             #taskDesc { width: 100%; flex: none; }
             .card { padding: 16px; }
         }
     </style>
 </head>
 <body>
+
 <div class="app">
+
     <header>
         <div class="logo-badge" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
@@ -280,7 +282,10 @@
             <p>Personal To-do Tracker</p>
         </div>
     </header>
+
     <div class="card">
+
+        <!-- Add task -->
         <form class="add-form" id="addForm">
             <div class="add-row">
                 <input type="text" id="taskTitle" placeholder="Task title..." autocomplete="off">
@@ -297,8 +302,9 @@
                     <input type="date" id="hiddenDate" title="Due date">
                 </div>
                 <select id="taskPriority" title="Priority">
+                    <option value="" disabled selected style="color:#9ca3af;">Priority...</option>
                     <option value="low">Low</option>
-                    <option value="medium" selected>Medium</option>
+                    <option value="medium">Medium</option>
                     <option value="high">High</option>
                 </select>
             </div>
@@ -311,12 +317,17 @@
             </div>
             <p class="add-error" id="addError">Enter a task title first.</p>
         </form>
+
+        <!-- Filters -->
         <div class="filters" id="filters">
             <button class="filter-btn active" data-filter="all">All <span class="count" id="countAll">0</span></button>
             <button class="filter-btn" data-filter="open">Open <span class="count" id="countOpen">0</span></button>
             <button class="filter-btn" data-filter="locked">Locked <span class="count" id="countLocked">0</span></button>
         </div>
+
+        <!-- Task list -->
         <ul class="task-list" id="taskList"></ul>
+
         <div class="empty" id="emptyState" style="display:none;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
@@ -325,29 +336,41 @@
             <h3 id="emptyTitle">Nothing locked in yet</h3>
             <p id="emptyText">Add your first task above.</p>
         </div>
+
+        <!-- Footer -->
         <div class="footer">
             <span class="stat"><strong id="statOpen">0</strong> open &middot; <strong id="statLocked">0</strong> locked</span>
         </div>
+
     </div>
 </div>
+
 <script>
 (function () {
     'use strict';
+
     var STORAGE_KEY = 'lockedin.tasks';
     var tasks = load();
     var currentFilter = 'all';
     var editingId = null;
 
+    // ---------- Helpers ----------
     function load() {
         try {
             var raw = localStorage.getItem(STORAGE_KEY);
             var parsed = raw ? JSON.parse(raw) : [];
             return Array.isArray(parsed) ? parsed : [];
-        } catch (e) { return []; }
+        } catch (e) {
+            return [];
+        }
     }
 
     function save() {
-        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks)); } catch (e) {}
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+        } catch (e) {
+            /* storage unavailable - app still works for the session */
+        }
     }
 
     function uid() {
@@ -369,24 +392,38 @@
     }
 
     function escapeHtml(str) {
-        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
     }
 
+    // ---------- Icons ----------
     function lockIcon(locked) {
         if (locked) {
-            return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>';
+            return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+                '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>' +
+                '<path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>';
         }
-        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>';
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+            '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>' +
+            '<path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>';
     }
 
     function trashIcon() {
-        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>';
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+            '<polyline points="3 6 5 6 21 6"></polyline>' +
+            '<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>';
     }
 
     function editIcon() {
-        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>';
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+            '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>' +
+            '<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>';
     }
 
+    // ---------- Rendering ----------
     function visibleTasks() {
         if (currentFilter === 'open') return tasks.filter(function (t) { return !t.locked; });
         if (currentFilter === 'locked') return tasks.filter(function (t) { return t.locked; });
@@ -397,6 +434,8 @@
         var list = document.getElementById('taskList');
         var empty = document.getElementById('emptyState');
         var shown = visibleTasks();
+
+        // Counts
         var open = tasks.filter(function (t) { return !t.locked; }).length;
         var locked = tasks.length - open;
         document.getElementById('countAll').textContent = tasks.length;
@@ -404,6 +443,8 @@
         document.getElementById('countLocked').textContent = locked;
         document.getElementById('statOpen').textContent = open;
         document.getElementById('statLocked').textContent = locked;
+
+        // Empty state
         if (shown.length === 0) {
             list.innerHTML = '';
             empty.style.display = 'block';
@@ -420,24 +461,40 @@
             return;
         }
         empty.style.display = 'none';
+
         list.innerHTML = shown.map(function (t) {
             var due = formatDate(t.due);
             var meta = [];
             if (due) meta.push('<span>Due: ' + due + '</span>');
             meta.push('<span class="priority ' + escapeHtml(t.priority || 'medium') + '">' + escapeHtml(t.priority || 'medium') + '</span>');
             if (t.description) meta.push('<span>' + escapeHtml(t.description) + '</span>');
+
             return '<li class="task-item' + (t.locked ? ' locked' : '') + '" data-id="' + t.id + '">' +
                 '<button class="lock-btn' + (t.locked ? ' locked-btn' : '') + '" data-action="toggle" title="' +
                 (t.locked ? 'Mark as open' : 'Lock it in') + '">' + lockIcon(t.locked) + '</button>' +
-                '<div class="task-body"><div class="task-title">' + escapeHtml(t.title) + '</div><div class="task-meta">' + meta.join('') + '</div></div>' +
+                '<div class="task-body">' +
+                    '<div class="task-title">' + escapeHtml(t.title) + '</div>' +
+                    '<div class="task-meta">' + meta.join('') + '</div>' +
+                '</div>' +
                 '<button class="edit-btn" data-action="edit" title="Edit task">' + editIcon() + '</button>' +
-                '<button class="delete-btn" data-action="delete" title="Delete task">' + trashIcon() + '</button></li>';
+                '<button class="delete-btn" data-action="delete" title="Delete task">' + trashIcon() + '</button>' +
+                '</li>';
         }).join('');
     }
 
+    // ---------- Actions ----------
     function addTask(title, desc, due, priority) {
-        tasks.unshift({ id: uid(), title: title, description: desc, due: due, priority: priority, locked: false, createdAt: new Date().toISOString() });
-        save(); render();
+        tasks.unshift({
+            id: uid(),
+            title: title,
+            description: desc,
+            due: due,
+            priority: priority,
+            locked: false,
+            createdAt: new Date().toISOString()
+        });
+        save();
+        render();
     }
 
     function toggleTask(id) {
@@ -447,7 +504,8 @@
 
     function deleteTask(id) {
         tasks = tasks.filter(function (x) { return x.id !== id; });
-        save(); render();
+        save();
+        render();
     }
 
     function startEdit(id) {
@@ -475,7 +533,7 @@
         addBtn.classList.remove('editing');
         document.getElementById('cancelBtn').style.display = 'none';
         document.getElementById('addForm').reset();
-        document.getElementById('taskPriority').value = 'medium';
+        document.getElementById('taskPriority').selectedIndex = 0;
         document.getElementById('hiddenDate').value = '';
         document.getElementById('taskDueDisplay').value = '';
         document.getElementById('addError').style.display = 'none';
@@ -484,24 +542,37 @@
     function saveEdit(id, title, desc, due, priority) {
         var t = tasks.find(function (x) { return x.id === id; });
         if (!t) return;
-        t.title = title; t.description = desc; t.due = due; t.priority = priority;
-        save(); cancelEdit(); render();
+        t.title = title;
+        t.description = desc;
+        t.due = due;
+        t.priority = priority;
+        save();
+        cancelEdit();
+        render();
     }
 
+    // ---------- Events ----------
     document.getElementById('addForm').addEventListener('submit', function (e) {
         e.preventDefault();
         var titleInput = document.getElementById('taskTitle');
         var err = document.getElementById('addError');
         var title = titleInput.value.trim();
-        if (!title) { err.style.display = 'block'; titleInput.focus(); return; }
+        if (!title) {
+            err.style.display = 'block';
+            titleInput.focus();
+            return;
+        }
         err.style.display = 'none';
         var desc = document.getElementById('taskDesc').value.trim();
         var due = document.getElementById('hiddenDate').value;
-        var priority = document.getElementById('taskPriority').value;
-        if (editingId) { saveEdit(editingId, title, desc, due, priority); }
-        else { addTask(title, desc, due, priority); }
+        var priority = document.getElementById('taskPriority').value || 'medium';
+        if (editingId) {
+            saveEdit(editingId, title, desc, due, priority);
+        } else {
+            addTask(title, desc, due, priority);
+        }
         this.reset();
-        document.getElementById('taskPriority').value = 'medium';
+        document.getElementById('taskPriority').selectedIndex = 0;
         document.getElementById('hiddenDate').value = '';
         document.getElementById('taskDueDisplay').value = '';
         titleInput.focus();
@@ -511,7 +582,9 @@
         document.getElementById('addError').style.display = 'none';
     });
 
-    document.getElementById('cancelBtn').addEventListener('click', function () { cancelEdit(); });
+    document.getElementById('cancelBtn').addEventListener('click', function () {
+        cancelEdit();
+    });
 
     document.getElementById('taskList').addEventListener('click', function (e) {
         var btn = e.target.closest('button[data-action]');
@@ -521,7 +594,9 @@
         if (btn.getAttribute('data-action') === 'toggle') toggleTask(id);
         else if (btn.getAttribute('data-action') === 'edit') startEdit(id);
         else if (btn.getAttribute('data-action') === 'delete') {
-            if (confirm('Are you sure you want to delete this task?')) { deleteTask(id); }
+            if (confirm('Are you sure you want to delete this task?')) {
+                deleteTask(id);
+            }
         }
     });
 
@@ -536,6 +611,7 @@
         render();
     });
 
+    // ---------- Date picker ----------
     var dateIconBtn = document.getElementById('dateIconBtn');
     var hiddenDate = document.getElementById('hiddenDate');
     var dueDisplay = document.getElementById('taskDueDisplay');
